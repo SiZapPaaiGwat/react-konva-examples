@@ -2,9 +2,9 @@ import React from 'react'
 import { Line, Circle, Group } from 'react-konva'
 import {
   getRelativePointerPosition,
-  findPointPosition,
-  findNearest,
-  distanceOfPoints
+  calcNearestIndexToPolyline,
+  calcNearestPointOnLine,
+  calcDistanceToPoint
 } from './utils'
 import useStore from './store'
 
@@ -31,7 +31,7 @@ export default (props) => {
    */
   const updateFloatPoint = (e) => {
     const point = getRelativePointerPosition(e.target.getStage())
-    const index = findPointPosition(point, points)
+    const index = calcNearestIndexToPolyline(point, points, RADIUS_BIG / scale)
     if (index === -1) {
       console.log('Can not find index')
       setHoverIndex(-1)
@@ -41,15 +41,15 @@ export default (props) => {
 
     const prev = points[index - 1]
     const next = points[index]
-    const pos = findNearest(prev, next, point)
-    const dis1 = distanceOfPoints(prev.x, prev.y, pos.x, pos.y)
+    const pos = calcNearestPointOnLine(prev, next, point)
+    const dis1 = calcDistanceToPoint(prev.x, prev.y, pos.x, pos.y)
     if (dis1 < HOVER_GAP / scale) {
       setHoverIndex(index - 1)
       setFloatPoint(null)
       return
     }
 
-    const dis2 = distanceOfPoints(next.x, next.y, pos.x, pos.y)
+    const dis2 = calcDistanceToPoint(next.x, next.y, pos.x, pos.y)
     if (dis2 < HOVER_GAP / scale) {
       setHoverIndex(index)
       setFloatPoint(null)

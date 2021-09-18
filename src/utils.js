@@ -1,11 +1,3 @@
-export function integerify({ x, y }) {
-  return { x, y }
-}
-
-export function isOnLine(x, y, endx, endy, px, py) {
-  return (px - x) * (px - endx) <= 0 && (py - y) * (py - endy) <= 0
-}
-
 export function getRelativePointerPosition(node) {
   const transform = node.getAbsoluteTransform().copy()
   transform.invert()
@@ -13,12 +5,19 @@ export function getRelativePointerPosition(node) {
   return transform.point(pos)
 }
 
-export function findPointPosition(point, points) {
+export function calcNearestIndexToPolyline(point, points, tolerance = 5) {
   for (let i = 0; i < points.length - 1; i += 1) {
     const start = points[i]
     const end = points[i + 1]
-    const dis = distance(point.x, point.y, start.x, start.y, end.x, end.y)
-    if (dis < 5) {
+    const dis = calcDistanceToLine(
+      point.x,
+      point.y,
+      start.x,
+      start.y,
+      end.x,
+      end.y
+    )
+    if (dis < tolerance) {
       return i + 1
     }
   }
@@ -29,7 +28,7 @@ export function findPointPosition(point, points) {
 /**
  * 找到点与线段垂直相交的点
  */
-export function findNearest(a, b, p) {
+export function calcNearestPointOnLine(a, b, p) {
   var atob = { x: b.x - a.x, y: b.y - a.y }
   var atop = { x: p.x - a.x, y: p.y - a.y }
   var len = atob.x * atob.x + atob.y * atob.y
@@ -42,7 +41,7 @@ export function findNearest(a, b, p) {
 /**
  * 计算点与线段之间的距离
  */
-export function distance(x, y, x1, y1, x2, y2) {
+export function calcDistanceToLine(x, y, x1, y1, x2, y2) {
   var A = x - x1
   var B = y - y1
   var C = x2 - x1
@@ -72,6 +71,6 @@ export function distance(x, y, x1, y1, x2, y2) {
   return Math.sqrt(dx * dx + dy * dy)
 }
 
-export function distanceOfPoints(x1, y1, x2, y2) {
+export function calcDistanceToPoint(x1, y1, x2, y2) {
   return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 }
