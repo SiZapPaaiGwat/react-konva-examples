@@ -2,10 +2,7 @@
   "name": "annotation-with-line-using-react-konva",
   "version": "1.0.0",
   "description": "This demo is trying to use react-konva as an annotation tool.",
-  "keywords": [
-    "konva.js",
-    "react-konva"
-  ],
+  "keywords": ["konva.js", "react-konva"],
   "main": "src/index.js",
   "dependencies": {
     "konva": "8.1.4",
@@ -23,13 +20,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
 }
