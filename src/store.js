@@ -36,11 +36,17 @@ const [useStore] = create((set) => ({
    * Editor mode type
    * Line / Rect / Polygon
    */
-  shapeType: 'Rect',
+  shapeType: 'Line',
   setShapeType: (shapeType) => set({ shapeType }),
 
-  rects: [{ x: 10, y: 10, width: 100, height: 100 }],
-  setRectangles: (rects) => set({ rects })
+  rects: [
+    { x: 10, y: 10, width: 100, height: 100, fill: 'red' },
+    { x: 200, y: 200, width: 100, height: 100, fill: 'green' },
+    { x: 400, y: 400, width: 100, height: 100, fill: 'blue' }
+  ],
+  setRectangles: (rects) => set({ rects }),
+  selectedRectIndex: -1,
+  setSelectedRectIndex: (selectedRectIndex) => set({ selectedRectIndex })
 }))
 
 export default useStore
