@@ -1,0 +1,3 @@
+/**
+ * Editor container
+ */
