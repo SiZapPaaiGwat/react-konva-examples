@@ -1,11 +1,6 @@
 import React from 'react'
 import { Line, Circle, Group } from 'react-konva'
-import {
-  getRelativePointerPosition,
-  calcNearestIndexToPolyline,
-  calcNearestPointOnLine,
-  calcDistanceToPoint
-} from './utils'
+import { getRelativePointerPosition } from './utils'
 import useStore from './store'
 
 const RADIUS_NORMAL = 3
@@ -14,58 +9,23 @@ const HOVER_GAP = RADIUS_BIG + RADIUS_NORMAL + 1
 
 export default (props) => {
   const points = useStore((s) => s.points)
-  const setPoints = useStore((s) => s.setPoints)
   const hoverIndex = useStore((s) => s.hoverIndex)
   const dragIndex = useStore((s) => s.dragIndex)
   const setDragIndex = useStore((s) => s.setDragIndex)
-  const setHoverIndex = useStore((s) => s.setHoverIndex)
+  const replacePoint = useStore((s) => s.replacePoint)
+  const createBodyPoint = useStore((s) => s.createBodyPoint)
   const setFloatPoint = useStore((s) => s.setFloatPoint)
   const floatPoint = useStore((s) => s.floatPoint)
   const scale = useStore((s) => s.scale)
-  const disableBubble = (e) => {
-    e.cancelBubble = true
-  }
+  const clearIndex = useStore((s) => s.clearIndex)
+
   /**
    * 避免直接使用 Line 的 mouse 相关事件
    * 鼠标移动的时候会有一个距离误差，导致频繁出发 mousemove / mouseleave
    */
   const updateFloatPoint = (e) => {
     const point = getRelativePointerPosition(e.target.getStage())
-    const index = calcNearestIndexToPolyline(point, points, RADIUS_BIG / scale)
-    if (index === -1) {
-      console.log('Can not find index')
-      setHoverIndex(-1)
-      setFloatPoint(null)
-      return
-    }
-
-    const prev = points[index - 1]
-    const next = points[index]
-    const pos = calcNearestPointOnLine(prev, next, point)
-    const dis1 = calcDistanceToPoint(prev.x, prev.y, pos.x, pos.y)
-    if (dis1 < HOVER_GAP / scale) {
-      setHoverIndex(index - 1)
-      setFloatPoint(null)
-      return
-    }
-
-    const dis2 = calcDistanceToPoint(next.x, next.y, pos.x, pos.y)
-    if (dis2 < HOVER_GAP / scale) {
-      setHoverIndex(index)
-      setFloatPoint(null)
-      return
-    }
-
-    setHoverIndex(-1)
-    setFloatPoint(pos)
-  }
-  /**
-   * 离开 Line 和 Circle 时清除状态
-   */
-  const clearLayerStatus = (e) => {
-    setDragIndex(-1)
-    setHoverIndex(-1)
-    setFloatPoint(null)
+    setFloatPoint(point, RADIUS_BIG / scale, HOVER_GAP / scale)
   }
 
   const hanleDragMove = (e) => {
@@ -75,18 +35,26 @@ export default (props) => {
     }
 
     const newPos = e.target.position()
-    points.splice(dragIndex, 1, {
-      x: newPos.x,
-      y: newPos.y
-    })
-    setPoints([...points])
+    replacePoint(
+      {
+        x: newPos.x,
+        y: newPos.y
+      },
+      dragIndex
+    )
+  }
+
+  const createPoint = (e) => {
+    const point = getRelativePointerPosition(e.target.getStage())
+    createBodyPoint(point, RADIUS_BIG / scale)
   }
 
   return (
     <Group
       onMouseMove={updateFloatPoint}
       onDragMove={hanleDragMove}
-      onMouseLeave={clearLayerStatus}
+      onMouseLeave={clearIndex}
+      onClick={createPoint}
       {...props}
     >
       <Line
@@ -111,7 +79,6 @@ export default (props) => {
           draggable
           onDragStart={(e) => setDragIndex(index)}
           onDragEnd={(e) => setDragIndex(-1)}
-          onClick={disableBubble}
           fill="#fff"
           stroke="red"
           strokeWidth={2 / scale}
@@ -123,7 +90,6 @@ export default (props) => {
         y={floatPoint ? floatPoint.y : 0}
         radius={RADIUS_BIG / scale}
         opacity={floatPoint ? 1 : 0}
-        onClick={disableBubble}
         fill="#fff"
         stroke="red"
         strokeWidth={2 / scale}

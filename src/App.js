@@ -12,9 +12,7 @@ const IMAGE_URL =
   'https://www.bing.com/th?id=OHR.BirnbeckPier_ZH-CN0177628993_1920x1080.jpg&rf=LaDigue_1920x1080.jpg'
 
 export default function App() {
-  const points = useStore((s) => s.points)
-  const setPoints = useStore((s) => s.setPoints)
-  const setHoverIndex = useStore((s) => s.setHoverIndex)
+  const createTailPoint = useStore((s) => s.createTailPoint)
   const width = useStore((s) => s.width)
   const height = useStore((s) => s.height)
   const scale = useStore((s) => s.scale)
@@ -23,8 +21,7 @@ export default function App() {
   const isRectEnabled = shapeType === 'Rect'
   const creatPoint = (e) => {
     const point = getRelativePointerPosition(e.target.getStage())
-    setHoverIndex(points.length)
-    setPoints(points.concat(point))
+    createTailPoint(point)
   }
 
   return (
