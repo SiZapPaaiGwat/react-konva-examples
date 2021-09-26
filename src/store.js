@@ -6,7 +6,7 @@ import {
   calcDistanceToPoint
 } from './utils'
 
-const useStore = create((set) => ({
+const useStore = create(set => ({
   /**
    * In line mode, a click will generate a point
    * multiple clicks will generate a polyline
@@ -14,9 +14,9 @@ const useStore = create((set) => ({
    */
   points: [],
   // Add a new point out of polyline is simple
-  createTailPoint: (point) =>
+  createTailPoint: point =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.hoverIndex = draft.points.length
         draft.points.push(point)
       })
@@ -24,7 +24,7 @@ const useStore = create((set) => ({
   // Add a new point on the polyline need more calculation
   createBodyPoint: (point, tolerance) =>
     set(
-      produce((draft) => {
+      produce(draft => {
         const index = calcNearestIndexToPolyline(point, draft.points, tolerance)
         if (index <= 0 || index > draft.points.length - 1) {
           console.log('Out of polyline')
@@ -39,15 +39,15 @@ const useStore = create((set) => ({
         draft.points[index] = pos
       })
     ),
-  setPoints: (points) =>
+  setPoints: points =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.points = points
       })
     ),
   replacePoint: (point, index) =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.points[index] = point
       })
     ),
@@ -64,7 +64,7 @@ const useStore = create((set) => ({
   hoverIndex: -1,
   setFloatPoint: (point, tolerance, floatTolerance) =>
     set(
-      produce((draft) => {
+      produce(draft => {
         const index = calcNearestIndexToPolyline(point, draft.points, tolerance)
         if (index === -1) {
           console.log('Out of polyline')
@@ -97,16 +97,16 @@ const useStore = create((set) => ({
    * polyline's point is draggable
    */
   dragIndex: -1,
-  setDragIndex: (dragIndex) =>
+  setDragIndex: dragIndex =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.dragIndex = dragIndex
       })
     ),
 
   clearIndex: () =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.hoverIndex = -1
         draft.dragIndex = -1
         draft.floatPoint = null
@@ -118,9 +118,9 @@ const useStore = create((set) => ({
    * many number values in components depend on this
    */
   scale: 1,
-  setScale: (scale) =>
+  setScale: scale =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.scale = scale
       })
     ),
@@ -129,7 +129,7 @@ const useStore = create((set) => ({
   imageHeight: 1080,
   setImageSize: ({ imageWidth, imageHeight }) =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.imageWidth = imageWidth
         draft.imageHeight = imageHeight
       })
@@ -142,7 +142,7 @@ const useStore = create((set) => ({
   height: 600,
   setMetrics: ({ width, height }) =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.width = width
         draft.height = height
       })
@@ -153,9 +153,9 @@ const useStore = create((set) => ({
    * Line / Rect / Polygon
    */
   shapeType: 'Line',
-  setShapeType: (shapeType) =>
+  setShapeType: shapeType =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.shapeType = shapeType
       })
     ),
@@ -165,16 +165,16 @@ const useStore = create((set) => ({
     { x: 200, y: 200, width: 100, height: 100, fill: 'green' },
     { x: 400, y: 400, width: 100, height: 100, fill: 'blue' }
   ],
-  setRectangles: (rects) =>
+  setRectangles: rects =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.rects = rects
       })
     ),
   selectedRectIndex: -1,
-  setSelectedRectIndex: (selectedRectIndex) =>
+  setSelectedRectIndex: selectedRectIndex =>
     set(
-      produce((draft) => {
+      produce(draft => {
         draft.selectedRectIndex = selectedRectIndex
       })
     )

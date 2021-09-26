@@ -12,20 +12,20 @@ const IMAGE_URL =
   'https://www.bing.com/th?id=OHR.BirnbeckPier_ZH-CN0177628993_1920x1080.jpg&rf=LaDigue_1920x1080.jpg'
 
 export default function App() {
-  const createTailPoint = useStore((s) => s.createTailPoint)
-  const width = useStore((s) => s.width)
-  const height = useStore((s) => s.height)
-  const scale = useStore((s) => s.scale)
-  const shapeType = useStore((s) => s.shapeType)
+  const createTailPoint = useStore(s => s.createTailPoint)
+  const width = useStore(s => s.width)
+  const height = useStore(s => s.height)
+  const scale = useStore(s => s.scale)
+  const shapeType = useStore(s => s.shapeType)
   const isLineEnabled = shapeType === 'Line'
   const isRectEnabled = shapeType === 'Rect'
-  const creatPoint = (e) => {
+  const creatPoint = e => {
     const point = getRelativePointerPosition(e.target.getStage())
     createTailPoint(point)
   }
 
   return (
-    <div className="App">
+    <div className='App'>
       <Stage width={width} height={height} scaleX={scale} scaleY={scale}>
         <Layer onClick={creatPoint} listening={isLineEnabled}>
           <Image url={IMAGE_URL} />

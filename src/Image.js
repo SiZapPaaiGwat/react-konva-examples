@@ -3,14 +3,14 @@ import { Image, Group } from 'react-konva'
 import useImage from 'use-image'
 import useStore from './store'
 
-export default (props) => {
+export default props => {
   const { url } = props
   const [image] = useImage(url, 'Anonymous')
-  const setScale = useStore((s) => s.setScale)
-  const setMetrics = useStore((s) => s.setMetrics)
-  const setImageSize = useStore((s) => s.setImageSize)
-  const width = useStore((s) => s.width)
-  const height = useStore((s) => s.height)
+  const setScale = useStore(s => s.setScale)
+  const setMetrics = useStore(s => s.setMetrics)
+  const setImageSize = useStore(s => s.setImageSize)
+  const width = useStore(s => s.width)
+  const height = useStore(s => s.height)
 
   useEffect(() => {
     if (!image) {

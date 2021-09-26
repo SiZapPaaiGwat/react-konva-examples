@@ -23,14 +23,14 @@ export default ({ shapeProps, isSelected, onSelect, onChange }) => {
         ref={shapeRef}
         {...shapeProps}
         draggable={isSelected}
-        onDragEnd={(e) => {
+        onDragEnd={e => {
           onChange({
             ...shapeProps,
             x: e.target.x(),
             y: e.target.y()
           })
         }}
-        onTransformEnd={(e) => {
+        onTransformEnd={e => {
           // transformer is changing scale of the node
           // and NOT its width or height
           // but in the store we have only width and height
@@ -53,7 +53,7 @@ export default ({ shapeProps, isSelected, onSelect, onChange }) => {
         <Transformer
           ref={trRef}
           anchorSize={5}
-          borderStroke="#ddd"
+          borderStroke='#ddd'
           borderDash={[3, 3]}
           rotateEnabled={false}
           boundBoxFunc={(oldBox, newBox) => {
